@@ -4,3 +4,7 @@
 *.ptx
 *.cubin
 *.fatbin
+VEditLog
+test
+_pycache_
+
