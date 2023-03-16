@@ -1,3 +1,7 @@
+-   few more effects
+-   frame by frame player
+-
+
 1. open
     1. Open file
     2. Open folder

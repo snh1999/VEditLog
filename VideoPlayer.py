@@ -25,7 +25,7 @@ def get_supported_mime_types():
     return result
 
 
-class MainWindow(QMainWindow):
+class VideoPlayerWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -50,12 +50,12 @@ class MainWindow(QMainWindow):
         ############################### File Menu ############################
         file_menu = self.menuBar().addMenu("&File")
         icon = QIcon.fromTheme("document-open")
-        open_action = QAction(icon, "&Open...", self, shortcut=QKeySequence.Open, triggered=self.open)
-        file_menu.addAction(open_action)
-        tool_bar.addAction(open_action)
+        self.open_action = QAction(icon, "&Open...", self, shortcut=QKeySequence.Open, triggered=self.open)
+        file_menu.addAction(self.open_action)
+        tool_bar.addAction(self.open_action)
         icon = QIcon.fromTheme("application-exit")
-        exit_action = QAction(icon, "&Exit", self, shortcut="Ctrl+Q", triggered=self.close)
-        file_menu.addAction(exit_action)
+        self.exit_action = QAction(icon, "&Exit", self, shortcut="Ctrl+Q", triggered=self.close)
+        file_menu.addAction(self.exit_action)
 
         ############################### Play Menu ############################
         play_menu = self.menuBar().addMenu("&Play")
@@ -95,7 +95,6 @@ class MainWindow(QMainWindow):
         self.replay_action.triggered.connect(self.replay_video)
         play_menu.addAction(self.replay_action)
 
-        # icon = QIcon.fromTheme("view-refresh")
         self.speed_action = tool_bar.addAction(str(self.playback_speed)+"x")
         self.speed_action.triggered.connect(self.adjust_playback_speed)
         # play_menu.addAction(self.replay_action)
@@ -152,8 +151,6 @@ class MainWindow(QMainWindow):
         bottom_control_layout.addWidget(self.video_current_position)
         bottom_control_layout.addWidget(self.video_duration)
         bottom_control_layout.addWidget(self.video_seek_slider)
-        # TODO- add time as well
-
 
 
         main_layout = QVBoxLayout()
@@ -278,13 +275,11 @@ class MainWindow(QMainWindow):
         if self.replay_flag and self._playlist and self._player.playbackState() != QMediaPlayer.PlayingState:
             self.replay_current()
         else: 
-            print("jere")
             self.replay_flag = not self.replay_flag
         self.replay_action.setToolTip("Replay: " + str(self.replay_flag))
 
     @Slot()
     def adjust_playback_speed(self):
-        print("here")
         if self.playback_speed == 1:
             self._player.setPlaybackRate(2)
             self.playback_speed = 2
@@ -298,7 +293,6 @@ class MainWindow(QMainWindow):
             self._player.setPlaybackRate(1)
             self.playback_speed = 1
         self.speed_action.setIconText(str(self.playback_speed)+"x")
-            
 
     
 
@@ -323,11 +317,11 @@ class MainWindow(QMainWindow):
     def getDurationInMins(self, total_time):
         minute_converted = total_time/1000/60
         seconds_converted = (minute_converted - int(minute_converted)) * 60
-        def returnString(time_num):
+        def return_string(time_num):
             if time_num < 10:
                 return "0" + str(int(time_num))
             return str(int(time_num)) 
-        return returnString(minute_converted) + ":" + returnString(seconds_converted)
+        return return_string(minute_converted) + ":" + return_string(seconds_converted)
 
         
 
@@ -345,3 +339,10 @@ class MainWindow(QMainWindow):
         self._player.position()
         time.sleep(1)
         self.playMedia(self._playlist[self._playlist_index])
+        
+        
+    def get_source(self):
+        return self._playlist[self._playlist_index].toString(), self._player.duration()
+    
+    def get_player_time(self):
+        return self._player.position()

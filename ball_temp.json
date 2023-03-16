@@ -1,0 +1,4 @@
+{
+    "properties": ["source", "start", "end", "quality", "volume", "speed", "is_reverse", "rotation(degree)", "fade in(s)", "fade out(s)"],
+    "employees": []
+}

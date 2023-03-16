@@ -1,0 +1,26 @@
+{
+    "properties": ["source", "start", "end", "quality", "volume", "speed", "is_reverse", "rotation(degree)", "fade in(s)", "fade out(s)"],
+    "data": [
+        {
+            "source": "1.mp4",
+            "start": 0,
+            "end": 0,
+            "is_reverse": false,
+            "speed": 1
+        },
+        {
+            "source": "2.mp4",
+            "start": 0,
+            "end": 0,
+            "is_reverse": false,
+            "speed": 1
+        },
+        {
+            "source": "3.mp4",
+            "start": 0,
+            "end": 0,
+            "is_reverse": false,
+            "speed": 1
+        }
+    ]
+}
