@@ -15,9 +15,9 @@ class MainWindow():
         
         
     def handle_welcome_screen(self):
-        def get_filepaths(project_location, temp_location):
+        def get_filepaths(project_location):
             self.project_location = project_location
-            self.temp_location = temp_location
+            # self.temp_location = temp_location
             self.open_editor_window()
             # open editor window
       
@@ -32,7 +32,7 @@ class MainWindow():
     def open_editor_window(self):
         window = EditorWindow(self.project_location)
         available_geometry = window.screen().availableGeometry()
-        window.resize(available_geometry.width() / 3, available_geometry.height() / 2)
+        window.resize(available_geometry.width(), available_geometry.height())
         window.show()
             
         

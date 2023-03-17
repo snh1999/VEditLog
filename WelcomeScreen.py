@@ -36,7 +36,7 @@ class EditorCreateWindow(QWidget):
     @Slot()
     def find_project(self):
         self.project_location = Utils.getProject(self)
-        self.temp_location = Utils.createTempCopy(self.project_location)
+        # self.temp_location = Utils.createTempCopy(self.project_location)
         # open project window
         self.close_window()
         
@@ -64,7 +64,7 @@ class EditorCreateWindow(QWidget):
     
     def close_window(self):
         self.close()
-        self.result_callback(self.project_location, self.temp_location)
+        self.result_callback(self.project_location)
            
     def set_result_callback(self, callback):
         self.result_callback = callback

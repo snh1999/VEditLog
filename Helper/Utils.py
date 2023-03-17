@@ -60,12 +60,12 @@ class Utils:
     @staticmethod
     def createProject(project_location):
         empty_project = {"properties": ["source", "start", "end", "quality", "volume", "speed", "is_reverse", "rotation(degree)", "fade in(s)", "fade out(s)"],
-                         "employees": []
+                         "data": []
                         }
         with open(project_location, "w") as f:
             json.dump(empty_project, f)
             
-        temp_location = createTempCopy(project_location)
+        temp_location = Utils.createTempCopy(project_location)
         return project_location, temp_location
             
     @staticmethod

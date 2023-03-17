@@ -6,7 +6,7 @@
 import sys, time
 from PySide6.QtCore import QStandardPaths, Qt, Slot, QTimer
 from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import QApplication, QDialog, QFileDialog, QMainWindow, QSlider, QStyle, QLabel, QToolBar, QWidget, QSizePolicy, QHBoxLayout, QVBoxLayout
+from PySide6.QtWidgets import QApplication, QDialog, QFileDialog, QMainWindow,  QSlider, QStyle, QLabel, QToolBar, QWidget, QSizePolicy, QHBoxLayout, QVBoxLayout
 from PySide6.QtMultimedia import QAudioOutput, QMediaFormat, QMediaPlayer
 from PySide6.QtMultimediaWidgets import QVideoWidget
 
