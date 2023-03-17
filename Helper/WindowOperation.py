@@ -5,8 +5,6 @@ from VideoPlayer import VideoPlayerWindow
 
 
 class WindowOperation(QMainWindow):
-    
-    
     @staticmethod
     def join_vertical(height, window1, window2):
 

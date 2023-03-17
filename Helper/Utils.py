@@ -1,6 +1,18 @@
 from PySide6.QtWidgets import QApplication,QPushButton, QDialog, QFileDialog, QMainWindow, QSlider, QStyle, QLabel, QLineEdit, QToolBar, QWidget, QSizePolicy, QHBoxLayout, QVBoxLayout
 import os, shutil, json
 
+DEFAULTS = {
+    "start": '-',
+    "end": '-',
+    "quality": "default",
+    "volume": '1',
+    "speed": '1',
+    "is_reverse": "False", 
+    "rotation(degree)": "0", 
+    "fade in(s)": "0", 
+    "fade out(s)": "0"
+}
+
 class Utils:
     @staticmethod
     def getProject(arg_self):
@@ -47,7 +59,7 @@ class Utils:
 
     @staticmethod
     def createProject(project_location):
-        empty_project = {"properties": ["source", "start", "end", "is_reverse", "speed"],
+        empty_project = {"properties": ["source", "start", "end", "quality", "volume", "speed", "is_reverse", "rotation(degree)", "fade in(s)", "fade out(s)"],
                          "employees": []
                         }
         with open(project_location, "w") as f:
@@ -76,7 +88,7 @@ class Utils:
 
         temp = []
         for obj in data:
-            row = [obj[key] for key in keys]
+            row = [obj[key] if key in obj else DEFAULTS[key] for key in keys]
             temp.append(row)
         
         return [keys] + [temp]
@@ -86,4 +98,32 @@ class Utils:
         button.setStyleSheet('''
             min-height: 30px;
         ''')
+        
+    @staticmethod
+    def arrayToObj(keys, value_array):
+        obj_array = []
+        for value_row in value_array:
+            temp_obj = {}
+            for i in range(len(value_row)):
+                temp_obj[keys[i]] = value_row[i]
+            obj_array.append(temp_obj)
+            
+        return obj_array
+    
+    @staticmethod
+    def saveProject(project_location, data):
+        keys = data[0]
+        value_array = data[1]
+        
+        object_array = Utils.arrayToObj(keys, value_array)
+        project_obj = {"properties": keys, "data": object_array}
+
+        project_json = json.dumps(project_obj, indent=4)
+
+        
+        with open(project_location, "w") as f:
+            f.write(project_json)
+        
+        
+        
 

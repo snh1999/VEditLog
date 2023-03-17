@@ -41,7 +41,7 @@ class Table(QTableWidget):
         row = self.currentRow()
         self.selectRow(row)
         event.accept()
-        self.set_result_callback(row)
+        self.result_callback(row)
            
     def set_result_callback(self, callback):
         self.result_callback = callback
@@ -58,12 +58,14 @@ class ProjectDetails(QMainWindow):
         self.table = Table(project_array)
         self.save_button = QPushButton('Save Project')
         self.render_button = QPushButton('Render')
+        self.commit_button = QPushButton('Commit')
         
         # self.table_view.doubleClicked.connect(self.edit_row)
         
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.save_button)
         button_layout.addWidget(self.render_button)
+        button_layout.addWidget(self.commit_button)
         
         layout = QVBoxLayout()
         layout.addWidget(self.table)
@@ -76,7 +78,6 @@ class ProjectDetails(QMainWindow):
         
     def add_new_row(self, new_row_data):
         self.table.add_row(new_row_data)
-        print(self.get_rows())
     
     def get_rows(self):
         rows = []
@@ -94,8 +95,11 @@ class ProjectDetails(QMainWindow):
     def replace_table(self, new_table_data):
         self.table.populate(new_table_data)
         
-    def onReplaceRowClicked(self, row_num, new_row_data):
+    def replace_row(self, row_num, new_row_data):
         self.table.replace_row(row_num, new_row_data)
+        
+    def set_result_callback(self, callback):
+        self.table.set_result_callback(callback)
 
 # if __name__ == '__main__':
 

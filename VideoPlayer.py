@@ -215,9 +215,12 @@ class VideoPlayerWindow(QMainWindow):
 
         if file_dialog.exec() == QDialog.Accepted:
             url = file_dialog.selectedUrls()[0]
-            self._playlist.append(url)
-            self._playlist_index = len(self._playlist) - 1
-            self.playMedia(url)
+            self.set_media_and_play(url)
+            
+    def set_media_and_play(self, url):
+        self._playlist.append(url)
+        self._playlist_index = len(self._playlist) - 1
+        self.playMedia(url)
 
     @Slot()
     def _ensure_stopped(self):
@@ -346,3 +349,4 @@ class VideoPlayerWindow(QMainWindow):
     
     def get_player_time(self):
         return self._player.position()
+    

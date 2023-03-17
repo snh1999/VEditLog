@@ -154,13 +154,3 @@ class CreateProjectWindow(QDialog):
         # open error dialogue
         error_box.exec()
         return False
-        
-    
-
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     main_win = EditorCreateWindow()
-#     available_geometry = main_win.screen().availableGeometry()
-#     main_win.resize(available_geometry.width() / 3, available_geometry.height() / 2)
-#     main_win.show()
-#     sys.exit(app.exec()) 

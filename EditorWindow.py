@@ -1,9 +1,10 @@
 from PySide6.QtWidgets import QMainWindow, QApplication, QSplitter
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QUrl
 from ProjectDetails import ProjectDetails, History
 from Helper.WindowOperation import WindowOperation
 from RightWindow import RightWindow
 from Helper.Utils import Utils
+from Helper.Render import Render
 
 
 class LeftWindow(QMainWindow):
@@ -20,14 +21,20 @@ class LeftWindow(QMainWindow):
         
 class EditorWindow(QMainWindow):
     def __init__(self, project_location):
-        super().__init__()   
+        super().__init__()
+        self.row_to_edit = -1
+        self.project_location = project_location
+        self.data = Utils.projectToArray(project_location)
 
-        data = Utils.projectToArray(project_location)
-
-        self.leftwindow = LeftWindow(data)
-        self.rightwindow = RightWindow(len(data) - 1)
+        self.leftwindow = LeftWindow(self.data)
+        self.rightwindow = RightWindow(len(self.data[1]))
         
         self.rightwindow.video_details_window.add_button.clicked.connect(self.add_to_project)
+        self.rightwindow.video_details_window.delete_button.clicked.connect(self.delete_entry)
+        self.leftwindow.project_details_window.set_result_callback(self.send_to_rightwindow)
+        self.leftwindow.project_details_window.save_button.clicked.connect(self.save_project)
+        self.leftwindow.project_details_window.render_button.clicked.connect(self.render_project)
+        
         self.setup_splitter()
         
         
@@ -50,25 +57,69 @@ class EditorWindow(QMainWindow):
         self.splitter.setStretchFactor(0, 1)
         self.splitter.setStretchFactor(1, 1)
         
-    def add_to_project(self):
-        # add project
-        # get to positon and insert
         
-        # update project
-        # get the existing position (a variable maybe) and remove
-        # put to the new position
+    def send_to_rightwindow(self, row):
+        self.row_to_edit = row
+        data = self.data[1][self.row_to_edit]
+        file_url = QUrl.fromLocalFile(data[0])
+        self.rightwindow.video_details_window.toggle_delete_button()
+        self.rightwindow.video_player_window.set_media_and_play(file_url)
+        self.rightwindow.open_to_source("Update")
+        self.rightwindow.video_details_window.set_values(self.row_to_edit + 1, data, len(self.data[1]))
+        
+        
+        
+    def add_to_project(self):
         new_row = self.rightwindow.video_details_window.get_all_details()
-        # disable button
+        insert_place = int(new_row[0]) - 1 if new_row[0] != 'Append' else len(self.data[1])
+        new_row_data = new_row[1:]
+        
+        # ADD TO PROJECT + append
+        if self.rightwindow.video_details_window.add_button.text().startswith('A') and insert_place == len(self.data[1]):
+            self.data[1].append(new_row_data)
+            self.leftwindow.project_details_window.add_new_row(new_row_data)
+        # UPDATE PROJECT + same location
+        elif self.rightwindow.video_details_window.add_button.text().startswith('U') and self.row_to_edit == insert_place:
+            self.data[1][insert_place] = new_row_data
+            self.leftwindow.project_details_window.replace_row(insert_place, new_row_data)
+        
+        else:
+            # ADD TO PROJECT BUT IN MIDDLE/ UPDATE at a different place
+            if self.rightwindow.video_details_window.add_button.text().startswith('U'):
+                self.data[1].remove(self.data[1][self.row_to_edit])
+            
+            self.data[1].insert(int(insert_place), new_row_data)
+            self.leftwindow.project_details_window.replace_table(self.data[1])
+            
+        if self.rightwindow.video_details_window.add_button.text().startswith('U'):
+            self.rightwindow.video_details_window.toggle_delete_button()
+            
+        self.rightwindow.video_player_window._ensure_stopped()
+        self.rightwindow.video_details_window.finish_add_button_task()
+        self.row_to_edit = -1
+    
+    def delete_entry(self):
+        self.rightwindow.video_details_window.toggle_delete_button()
+        self.data[1].remove(self.data[1][self.row_to_edit])
+        self.leftwindow.project_details_window.replace_table(self.data[1])
+        
+        self.row_to_edit = -1
+        self.rightwindow.video_player_window._ensure_stopped()
+        self.rightwindow.video_details_window.finish_add_button_task()
+        
+    def save_project(self):
+        Utils.saveProject(self.project_location, self.data)
+        
+    def render_project(self):
+        path_temp = self.project_location.split('.')
+        path_temp[-1] = "mp4"
+        render_path = ".".join(path_temp)
+        Render.render_project(self.data[1], render_path)
+        
+        
             
 if __name__ == "__main__":
     app = QApplication([])
-    window = EditorWindow('ball.json')
+    window = EditorWindow('./test.json')
     window.show()
     app.exec()
-        
-# if __name__ == "__main__":
-#     app = QApplication([])
-#     window = RightWindow()
-#     window.show()
-#     app.exec()
-    

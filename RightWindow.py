@@ -25,10 +25,15 @@ class RightWindow(QMainWindow):
         # double click will reset
         
         
-    def open_to_source(self):
+    def open_to_source(self, btn_text = "Add to Project"):
+        
         source_path, clip_length = self.video_player_window.get_source()
-        self.video_details_window.set_source(source_path, clip_length)
-        self.video_details_window.set_add_update_button_text("Add to Project")
+        self.video_details_window.set_source(source_path[7:], clip_length)
+        if btn_text:
+            self.video_details_window.set_add_update_button_text(btn_text)
+        else:
+            self.video_details_window.set_add_update_button_text("Add to Project")
+            
         
     def pick_button_click(self):
         if not self.video_details_window.source_path:
@@ -43,9 +48,5 @@ class RightWindow(QMainWindow):
             sender.setText("Pick " + text + "!")
             
         
-# if __name__ == "__main__":
-#     app = QApplication([])
-#     window = RightWindow(0)
-#     window.show()
-#     app.exec()
+#window = RightWindow(0)
     
