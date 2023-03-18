@@ -3,6 +3,7 @@
 [The Edited video](./images-videos/demo.mp4)
 
 ![Tutorial Demo](./images-videos/output.gif "Tutorial Demo")
+For some reason, the converted gif image looks weird on github README. So I added short summary with images.
 
 |      Welcome Screen       |       Open Project        |        New Project        |
 | :-----------------------: | :-----------------------: | :-----------------------: |
